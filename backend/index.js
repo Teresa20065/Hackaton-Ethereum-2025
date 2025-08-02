@@ -1,31 +1,21 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const mongoose = require('./db');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
-
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Ruta visual para ver si corre
-app.get("/", (req, res) => {
-  res.send(`
-    <html>
-      <head><title>LlamaPou Backend</title></head>
-      <body style="font-family: Arial; text-align: center; margin-top: 50px;">
-        <h1>🐾 LlamaPou Backend está corriendo 🦙</h1>
-        <p>¡Bienvenido Alex y equipo!</p>
-      </body>
-    </html>
-  `);
+app.get('/', (req, res) => {
+  res.send('🦙 LlamaPou Backend funcionando correctamente');
 });
 
-// API de prueba
-app.get("/api", (req, res) => {
-  res.json({ message: "LlamaPou backend is running 🦙" });
-});
+const loginRoute = require('./routes/login');
+app.use('/api/login', loginRoute);
 
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });

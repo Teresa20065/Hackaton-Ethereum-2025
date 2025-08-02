@@ -1,13 +1,126 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>LlamaPou – Login con MetaMask</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fefae0;
+      text-align: center;
+      padding: 40px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      background-color: #5f3c2a;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+      margin: 5px;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #llama-img {
+      margin-top: 20px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🦙 LlamaPou</h1>
+  <button id="connect">Conectar Wallet</button>
+
+  <div id="status"></div>
+
+  <div id="register-form" style="display: none;">
+    <h2>Registro</h2>
+    <input type="text" id="llamaName" placeholder="Nombre de tu llama" />
+    <br>
+    <button onclick="registrarUsuario()">Crear mi llama</button>
+  </div>
+
+  <img id="llama-img" style="display: none;" src="" alt="Tu llama NFT" />
+
+  <script>
+    const status = document.getElementById('status');
+    const registerForm = document.getElementById('register-form');
+    const llamaImg = document.getElementById('llama-img');
+    let walletActual = null;
+
+    document.getElementById('connect').addEventListener('click', async () => {
+      if (!window.ethereum) {
+        alert("⚠️ Instala MetaMask para continuar");
+        return;
+      }
+
+      try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const wallet = accounts[0];
+        walletActual = wallet;
+        status.innerText = `✅ Conectado: ${wallet}`;
+
+        const res = await axios.post("http://localhost:5000/api/login", { wallet });
+
+        if (res.data.exists) {
+          const user = res.data.user;
+          status.innerText += `\n👋 Bienvenido ${user.llamaName}`;
+          mostrarLlama(user.llamaName);
+        } else {
+          status.innerText += `\n🔐 No estás registrado. Crea tu llama:`;
+          registerForm.style.display = 'block';
+        }
+
+      } catch (err) {
+        console.error(err);
+        status.innerText = "❌ Error al conectar la wallet";
+      }
+    });
+
+    async function registrarUsuario() {
+      const llamaName = document.getElementById('llamaName').value;
+      if (!llamaName || !walletActual) {
+        alert("Faltan datos");
+        return;
+      }
+
+      try {
+        const res = await axios.post("http://localhost:5000/api/register", {
+          wallet: walletActual,
+          llamaName
+        });
+
+        registerForm.style.display = 'none';
+        status.innerText = `✅ Llama registrada: ${llamaName}`;
+        mostrarLlama(llamaName);
+      } catch (err) {
+        console.error(err);
+        alert("❌ Error al registrar usuario");
+      }
+    }
+
+    function mostrarLlama(nombre) {
+      llamaImg.src = "./llama_default.png"; // Usa una imagen fija o reemplaza por IPFS luego
+      llamaImg.style.display = 'block';
+      llamaImg.alt = `Tu llama: ${nombre}`;
+    }
+  </script>
+
+</body>
 </html>
