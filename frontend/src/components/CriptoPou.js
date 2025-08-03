@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
 import './CriptoPou.css';
+import { BrowserProvider } from 'ethers';
 import alpacalotLogo from '../img/alpaca.jpg';
 import FourImageAnimation from './animation.js';
 
-const CriptoPou = ({ onWalletConnect }) => {
-  const [pouType, setPouType] = useState('Individual');
+const CriptoPou = ({ onWalletConnect}) => {
+const connectWallet = async () => {
+  if (!window.ethereum) {
+    alert('MetaMask no está instalada');
+    return;
+  }
+  const provider = new BrowserProvider(window.ethereum);
+  try {
+    await provider.send('eth_requestAccounts', []);
+    onWalletConnect();
+  } catch (error) {
+    console.error('Error al conectar la wallet:', error);
+  }
 
-  const handleWalletClick = () => {
-    if (onWalletConnect) {
-      onWalletConnect();
-    }
-  };
+};
 
   return (
     <div className="cripto-pou-container">
@@ -58,11 +65,11 @@ const CriptoPou = ({ onWalletConnect }) => {
           <h2 className="cripto-pou-title">PachaCoin</h2>
           <div className="title-underline"></div>
           <p className="subtitle"> Cria y haz crecer tu mascota NFT para ahorrar en Cripto. </p>
-          <button className="connect-wallet-btn" onClick={handleWalletClick}>
-            <span className="btn-text">Conectar Wallet</span>
-            <span className="btn-icon">🔗</span>
-            <div className="btn-glow"></div>
-          </button>
+           <button className="connect-wallet-btn" onClick={connectWallet}>
+        <span className="btn-text">Conectar Wallet</span>
+        <span className="btn-icon">🔗</span>
+        <div className="btn-glow"></div>
+      </button>
 
           <div className="learn-more">
             <span>¿Eres nuevo? </span>

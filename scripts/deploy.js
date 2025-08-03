@@ -1,9 +1,10 @@
 async function main() {
+  const [deployer] = await ethers.getSigners();
   const CryptoLlama = await ethers.getContractFactory("CryptoLlama");
-  const llama = await CryptoLlama.deploy();
+  const contract = await CryptoLlama.deploy();
+  await contract.deployed();
 
-  await llama.deployed();
-  console.log("✅ CryptoLlama deployed to:", llama.address);
+  console.log("Contrato desplegado en:", contract.address);
 }
 
 main().catch((error) => {
