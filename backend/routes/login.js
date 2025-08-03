@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     let user = await User.findOne({ wallet });
 
     if (!user) {
-      user = await User.create({ wallet });
+      user = await User.create({ wallet, balance: 0, deposits: [] });
       console.log('🆕 Usuario nuevo creado');
     } else {
       console.log('👤 Usuario ya existe');

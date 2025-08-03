@@ -139,7 +139,7 @@ const PublicAddress = () => {
   const renderTransactions = () => (
     <div className="transactions-section">
       <div className="transactions-header">
-        <h4>📊 Historial de Transacciones</h4>
+        <h3>📊 Historial de Transacciones</h3>
         <div className="transaction-filters">
           <button className="filter-btn active">Todas</button>
           <button className="filter-btn">Depósitos</button>
@@ -152,41 +152,32 @@ const PublicAddress = () => {
         {transactionHistory.map(transaction => (
           <div key={transaction.id} className="transaction-item">
             <div className="transaction-icon">
-              <span className="icon">{getTransactionIcon(transaction.type)}</span>
+              {getTransactionIcon(transaction.type)}
             </div>
             
-            <div className="transaction-details">
+            <div className="transaction-content">
               <div className="transaction-info">
-                <h6 className="transaction-type">
+                <h5 className="transaction-title">
                   {transaction.type === 'deposit' ? 'Depósito' : 
                    transaction.type === 'withdrawal' ? 'Retiro' : 'Swap'}
-                </h6>
-                <span className="transaction-date">{transaction.date}</span>
+                </h5>
+                <p className="transaction-date">{transaction.date}</p>
               </div>
               
               <div className="transaction-amount">
-                <span className="amount">
+                <span className="amount-value">
                   {transaction.type === 'withdrawal' ? '-' : '+'}
                   {transaction.amount} {transaction.currency}
                 </span>
-                <span 
-                  className="status-badge"
-                  style={{ backgroundColor: getStatusColor(transaction.status) }}
-                >
-                  {transaction.status === 'completed' ? 'Completado' : 
-                   transaction.status === 'pending' ? 'Pendiente' : 'Fallido'}
-                </span>
+                <span className="amount-time">{transaction.date}</span>
               </div>
             </div>
             
-            <div className="transaction-hash">
-              <span className="hash-text">{transaction.hash}</span>
-              <button 
-                className="copy-hash-btn"
-                onClick={() => copyToClipboard(transaction.hash)}
-              >
-                📋
-              </button>
+            <div className="transaction-status">
+              <span className={`transaction-status ${transaction.status}`}>
+                {transaction.status === 'completed' ? 'Completado' : 
+                 transaction.status === 'pending' ? 'Pendiente' : 'Fallido'}
+              </span>
             </div>
           </div>
         ))}
@@ -196,44 +187,57 @@ const PublicAddress = () => {
 
   const renderSecurity = () => (
     <div className="security-section">
-      <div className="security-card">
-        <h4>🔒 Seguridad de la Wallet</h4>
+      <div className="security-header">
+        <span className="security-icon">🔒</span>
+        <h3>Seguridad de la Wallet</h3>
+      </div>
+      
+      <div className="security-grid">
+        <div className="security-item">
+          <div className="security-item-header">
+            <div className="security-item-icon">🔐</div>
+            <h5 className="security-item-title">Autenticación de Dos Factores</h5>
+          </div>
+          <p className="security-item-description">Protege tu wallet con 2FA</p>
+          <div className="security-item-actions">
+            <button className="security-btn">Configurar</button>
+            <button className="security-btn secondary">Ver Detalles</button>
+          </div>
+        </div>
         
-        <div className="security-items">
-          <div className="security-item">
-            <div className="security-icon">🔐</div>
-            <div className="security-info">
-              <h6>Autenticación de Dos Factores</h6>
-              <p>Protege tu wallet con 2FA</p>
-              <span className="security-status active">Activado</span>
-            </div>
+        <div className="security-item">
+          <div className="security-item-header">
+            <div className="security-item-icon">📱</div>
+            <h5 className="security-item-title">Verificación Biométrica</h5>
           </div>
-          
-          <div className="security-item">
-            <div className="security-icon">📱</div>
-            <div className="security-info">
-              <h6>Verificación Biométrica</h6>
-              <p>Usa huella dactilar o Face ID</p>
-              <span className="security-status active">Activado</span>
-            </div>
+          <p className="security-item-description">Usa huella dactilar o Face ID</p>
+          <div className="security-item-actions">
+            <button className="security-btn">Activar</button>
+            <button className="security-btn secondary">Configurar</button>
           </div>
-          
-          <div className="security-item">
-            <div className="security-icon">🔔</div>
-            <div className="security-info">
-              <h6>Notificaciones de Transacciones</h6>
-              <p>Recibe alertas en tiempo real</p>
-              <span className="security-status active">Activado</span>
-            </div>
+        </div>
+        
+        <div className="security-item">
+          <div className="security-item-header">
+            <div className="security-item-icon">🔔</div>
+            <h5 className="security-item-title">Notificaciones de Transacciones</h5>
           </div>
-          
-          <div className="security-item">
-            <div className="security-icon">🛡️</div>
-            <div className="security-info">
-              <h6>Lista Blanca de Direcciones</h6>
-              <p>Restringe transacciones a direcciones conocidas</p>
-              <span className="security-status inactive">Desactivado</span>
-            </div>
+          <p className="security-item-description">Recibe alertas en tiempo real</p>
+          <div className="security-item-actions">
+            <button className="security-btn">Activar</button>
+            <button className="security-btn secondary">Configurar</button>
+          </div>
+        </div>
+        
+        <div className="security-item">
+          <div className="security-item-header">
+            <div className="security-item-icon">🛡️</div>
+            <h5 className="security-item-title">Lista Blanca de Direcciones</h5>
+          </div>
+          <p className="security-item-description">Restringe transacciones a direcciones conocidas</p>
+          <div className="security-item-actions">
+            <button className="security-btn">Configurar</button>
+            <button className="security-btn secondary">Ver Lista</button>
           </div>
         </div>
       </div>
@@ -242,40 +246,53 @@ const PublicAddress = () => {
 
   const renderSettings = () => (
     <div className="settings-section">
-      <div className="settings-card">
-        <h4>⚙️ Configuración de la Wallet</h4>
+      <div className="settings-header">
+        <span className="settings-icon">⚙️</span>
+        <h3>Configuración de la Wallet</h3>
+      </div>
+      
+      <div className="settings-grid">
+        <div className="setting-item">
+          <div className="setting-item-header">
+            <div className="setting-item-icon">🌐</div>
+            <h5 className="setting-item-title">Red Principal</h5>
+          </div>
+          <p className="setting-item-description">Ethereum Mainnet</p>
+          <div className="setting-item-controls">
+            <button className="security-btn">Cambiar Red</button>
+          </div>
+        </div>
         
-        <div className="settings-items">
-          <div className="setting-item">
-            <div className="setting-info">
-              <h6>Red Principal</h6>
-              <p>Ethereum Mainnet</p>
-            </div>
-            <button className="change-network-btn">Cambiar</button>
+        <div className="setting-item">
+          <div className="setting-item-header">
+            <div className="setting-item-icon">⛽</div>
+            <h5 className="setting-item-title">Gas Price</h5>
           </div>
-          
-          <div className="setting-item">
-            <div className="setting-info">
-              <h6>Gas Price</h6>
-              <p>Automático (Recomendado)</p>
-            </div>
-            <button className="change-gas-btn">Configurar</button>
+          <p className="setting-item-description">Automático (Recomendado)</p>
+          <div className="setting-item-controls">
+            <button className="security-btn">Configurar</button>
           </div>
-          
-          <div className="setting-item">
-            <div className="setting-info">
-              <h6>Límite de Transacción</h6>
-              <p>$1,000 por día</p>
-            </div>
-            <button className="change-limit-btn">Modificar</button>
+        </div>
+        
+        <div className="setting-item">
+          <div className="setting-item-header">
+            <div className="setting-item-icon">📊</div>
+            <h5 className="setting-item-title">Límite de Transacción</h5>
           </div>
-          
-          <div className="setting-item">
-            <div className="setting-info">
-              <h6>Exportar Clave Privada</h6>
-              <p>Guarda tu clave de forma segura</p>
-            </div>
-            <button className="export-key-btn danger">Exportar</button>
+          <p className="setting-item-description">$1,000 por día</p>
+          <div className="setting-item-controls">
+            <button className="security-btn">Modificar</button>
+          </div>
+        </div>
+        
+        <div className="setting-item">
+          <div className="setting-item-header">
+            <div className="setting-item-icon">🔑</div>
+            <h5 className="setting-item-title">Exportar Clave Privada</h5>
+          </div>
+          <p className="setting-item-description">Guarda tu clave de forma segura</p>
+          <div className="setting-item-controls">
+            <button className="security-btn">Exportar</button>
           </div>
         </div>
       </div>
@@ -318,8 +335,8 @@ const PublicAddress = () => {
         </div>
       </div>
 
-      <div className="address-container">
-        {/* Address Tabs */}
+      <div className="public-address-container">
+        {/* Address Tabs - Ahora están encima de las secciones */}
         <div className="address-tabs">
           <button 
             className={`address-tab ${activeTab === 'overview' ? 'active' : ''}`}
@@ -347,7 +364,7 @@ const PublicAddress = () => {
           </button>
         </div>
 
-        {/* Address Content */}
+        {/* Address Content - Contenido de las secciones */}
         <div className="address-content">
           {renderContent()}
         </div>
