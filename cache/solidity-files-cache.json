@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\teres\\Proyectos\\Hackaton-Ethereum-2025\\contracts\\CryptoLlama.sol": {
+      "lastModificationDate": 1754182265078,
+      "contentHash": "7f29295bb4cb7b59e2a057b99ee3c487",
+      "sourceName": "contracts/CryptoLlama.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CryptoLlama"
+      ]
+    }
+  }
+}
